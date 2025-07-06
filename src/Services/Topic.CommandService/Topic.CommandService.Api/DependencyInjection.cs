@@ -1,5 +1,7 @@
+using Confluent.Kafka;
 using Core.Events.Dao;
 using Core.Handlers;
+using Core.KafkaProducer;
 using Core.MediatR;
 using Core.Services;
 using Marten;
@@ -38,6 +40,9 @@ public static class DependencyInjection
         services.AddScoped<ICommentCommandHandler, CommentCommandHandler>();
         services.AddScoped<ITopicCommandHandler, TopicCommandHandler>();
         services.RegisterCommandHandler();
+
+        services.Configure<ProducerConfig>(configuration.GetSection("KafkaConfig"));
+        services.AddScoped<IEventKafkaProducer, EventKafkaProducer>();
         
         return services;
     }
