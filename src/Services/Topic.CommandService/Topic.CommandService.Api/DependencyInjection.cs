@@ -1,3 +1,4 @@
+using Carter;
 using Confluent.Kafka;
 using Core.Events.Dao;
 using Core.Handlers;
@@ -17,6 +18,7 @@ using Topic.CommandService.Api.Topic.Commands.RemoveTopic;
 using Topic.CommandService.Api.Topic.Commands.UpdateTopic;
 using Topic.CommandService.Domain.Aggregates;
 using Topic.CommandService.Infrastructure.Handlers;
+using Topic.CommandService.Infrastructure.KafkaProducer;
 using Topic.CommandService.Infrastructure.MediatR;
 using Topic.CommandService.Infrastructure.Services;
 
@@ -43,8 +45,16 @@ public static class DependencyInjection
 
         services.Configure<ProducerConfig>(configuration.GetSection("KafkaConfig"));
         services.AddScoped<IEventKafkaProducer, EventKafkaProducer>();
+
+        services.AddCarter();
         
         return services;
+    }
+
+    public static WebApplication UseApiServices(this WebApplication app)
+    {
+        app.MapCarter();
+        return app;
     }
 
     private static IServiceCollection RegisterCommandHandler(
