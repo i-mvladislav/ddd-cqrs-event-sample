@@ -36,6 +36,8 @@ public abstract class BaseEndpoint<TCommand>: ICarterModule
         catch (InvalidOperationException ex)
         {
             string errorMessage = "Проверьте параметры запроса";
+            logger.LogWarning(ex, errorMessage);
+            return Results.BadRequest(new ResponseDto { Message = errorMessage });
         }
         catch (AggregateNotFoundException ex)
         {
