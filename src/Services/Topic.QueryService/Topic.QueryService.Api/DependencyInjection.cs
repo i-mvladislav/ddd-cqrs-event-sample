@@ -1,4 +1,6 @@
 using Microsoft.EntityFrameworkCore;
+using Topic.QueryService.Domain.Dao;
+using Topic.QueryService.Infrastructure.Dao;
 using Topic.QueryService.Infrastructure.Data;
 
 namespace Topic.QueryService.Api;
@@ -10,6 +12,9 @@ public static class DependencyInjection
         IConfiguration configuration)
     {
         services.AddDbContextWithFactory(configuration);
+
+        services.AddScoped<ITopicStorage, TopicStorage>();
+        services.AddScoped<ICommentStorage, CommentStorage>();
 
         return services;
     }
