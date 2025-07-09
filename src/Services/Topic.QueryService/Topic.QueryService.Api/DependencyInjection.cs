@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using Topic.QueryService.Domain.Dao;
 using Topic.QueryService.Infrastructure.Dao;
 using Topic.QueryService.Infrastructure.Data;
+using Topic.QueryService.Infrastructure.Handlers;
 
 namespace Topic.QueryService.Api;
 
@@ -15,6 +16,7 @@ public static class DependencyInjection
 
         services.AddScoped<ITopicStorage, TopicStorage>();
         services.AddScoped<ICommentStorage, CommentStorage>();
+        services.AddScoped<IQueryEventHandler, QueryEventHandler>();
 
         return services;
     }
