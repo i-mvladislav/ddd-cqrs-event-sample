@@ -1,5 +1,7 @@
+using Confluent.Kafka;
 using Microsoft.EntityFrameworkCore;
 using Topic.QueryService.Domain.Dao;
+using Topic.QueryService.Infrastructure.Consumers;
 using Topic.QueryService.Infrastructure.Dao;
 using Topic.QueryService.Infrastructure.Data;
 using Topic.QueryService.Infrastructure.Handlers;
@@ -17,6 +19,13 @@ public static class DependencyInjection
         services.AddScoped<ITopicStorage, TopicStorage>();
         services.AddScoped<ICommentStorage, CommentStorage>();
         services.AddScoped<IQueryEventHandler, QueryEventHandler>();
+
+        var consumerConfig = new ConsumerConfig();
+        configuration.GetSection(nameof(ConsumerConfig)).Bind(consumerConfig);
+        services.AddSingleton(consumerConfig);
+
+        services.AddScoped<IKafkaEventSubscriber, KafkaEventSubscriber>();
+        services.AddHostedService<KafkaEventConsumerBackgroundService>();
 
         return services;
     }

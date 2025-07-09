@@ -11,7 +11,7 @@ using Core.Events.Topics.UpdateTopic;
 
 namespace Topic.QueryService.Infrastructure.Converters;
 
-public class EventJsonConverter<T> : JsonConverter<BaseEvent>
+public class EventJsonConverter : JsonConverter<BaseEvent>
 {
     public override bool CanConvert(Type objectType)
     {
