@@ -19,7 +19,7 @@ public class KafkaEventConsumerBackgroundService(
             .GetRequiredService<IKafkaEventSubscriber>();
         
         var topic = configuration.GetValue<string>("Kafka:Topic")!;
-        await Task.Run(() => eventConsumer.ConsumeAsync(topic, ct), ct);
+        Task.Run(() => eventConsumer.ConsumeAsync(topic, ct), ct);
     }
 
     public Task StopAsync(CancellationToken cancellationToken)
