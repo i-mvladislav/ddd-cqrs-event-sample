@@ -1,3 +1,4 @@
+using Carter;
 using Confluent.Kafka;
 using Core.MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -36,12 +37,15 @@ public static class DependencyInjection
         services.AddScoped<IKafkaEventSubscriber, KafkaEventSubscriber>();
         services.AddHostedService<KafkaEventConsumerBackgroundService>();
 
+        services.AddCarter();
+
         return services;
     }
 
     public static WebApplication UseApiServices(this WebApplication app)
     {
         DatabaseInitializer.Initialize(app);
+        app.MapCarter();
 
         return app;
     }
@@ -84,6 +88,8 @@ public static class DependencyInjection
                 topicQueryHandler.HandleAsync(query));
             dispatcher.RegisterHandler<GetTopicsWithLikesQuery>(query => 
                 topicQueryHandler.HandleAsync(query));
+            
+            return dispatcher;
         }); 
         
         return services;
