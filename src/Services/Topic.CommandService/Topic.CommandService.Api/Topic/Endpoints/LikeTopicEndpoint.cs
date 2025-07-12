@@ -18,7 +18,7 @@ public class LikeTopicEndpoint: BaseEndpoint<LikeTopicCommand>
         {
             return await ExecuteCommandAsync(
                 new LikeTopicCommand { Id = topicId },
-                cmd => commandDispatcher.SendCommandAsync(cmd),
+                async cmd => await commandDispatcher.SendCommandAsync(cmd),
                 logger);
         })
         .Produces<ResponseDto>(StatusCodes.Status200OK)

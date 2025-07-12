@@ -20,7 +20,7 @@ public class UpdateTopicEndpoint: BaseEndpoint<UpdateTopicCommand>
         {
             command.Id = topicId;
             return await ExecuteCommandAsync(command,
-                cmd => commandDispatcher.SendCommandAsync(cmd),
+                async cmd => await commandDispatcher.SendCommandAsync(cmd),
                 logger);
         })
         .Produces<ResponseDto>(StatusCodes.Status200OK)

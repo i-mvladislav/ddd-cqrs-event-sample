@@ -20,7 +20,7 @@ public class RemoveTopicEndpoint: BaseEndpoint<RemoveTopicCommand>
         {
             command.Id = topicId;
             return await ExecuteCommandAsync(command,
-                cmd => commandDispatcher.SendCommandAsync(cmd),
+                async cmd => await commandDispatcher.SendCommandAsync(cmd),
                 logger);
         })
         .Produces(StatusCodes.Status200OK)

@@ -37,6 +37,8 @@ public static class DependencyInjection
         services.AddScoped<IKafkaEventSubscriber, KafkaEventSubscriber>();
         services.AddHostedService<KafkaEventConsumerBackgroundService>();
 
+        services.RegisterQueriesHandler();
+
         services.AddCarter();
 
         return services;

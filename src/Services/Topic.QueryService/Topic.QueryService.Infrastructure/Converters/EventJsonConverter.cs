@@ -39,19 +39,19 @@ public class EventJsonConverter : JsonConverter<BaseEvent>
         BaseEvent? result = typeDiscriminator switch
         {
             nameof(CreateTopicEvent) =>
-                JsonSerializer.Deserialize<CreateTopicEvent>(json, options),
+                JsonSerializer.Deserialize<CreateTopicEvent>(json),
             nameof(UpdateTopicEvent) =>
-                JsonSerializer.Deserialize<UpdateTopicEvent>(json, options),
+                JsonSerializer.Deserialize<UpdateTopicEvent>(json),
             nameof(LikeTopicEvent) =>
-                JsonSerializer.Deserialize<LikeTopicEvent>(json, options),
+                JsonSerializer.Deserialize<LikeTopicEvent>(json),
             nameof(RemoveTopicEvent) =>
-                JsonSerializer.Deserialize<RemoveTopicEvent>(json, options),
+                JsonSerializer.Deserialize<RemoveTopicEvent>(json),
             nameof(CreateCommentEvent) =>
-                JsonSerializer.Deserialize<CreateCommentEvent>(json, options),
+                JsonSerializer.Deserialize<CreateCommentEvent>(json),
             nameof(UpdateCommentEvent) =>
-                JsonSerializer.Deserialize<UpdateCommentEvent>(json, options),
+                JsonSerializer.Deserialize<UpdateCommentEvent>(json),
             nameof(RemoveCommentEvent) =>
-                JsonSerializer.Deserialize<RemoveCommentEvent>(json, options),
+                JsonSerializer.Deserialize<RemoveCommentEvent>(json),
             _ => null,
         };
 
