@@ -1,24 +1,37 @@
-using Microsoft.AspNetCore.RateLimiting;
-using Microsoft.Extensions.Options;
+using System.Threading.RateLimiting;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddReverseProxy()
     .LoadFromConfig(builder.Configuration.GetSection("YarpProxy"));
 
-builder.Services.AddRateLimiter(option =>
+builder.Services.AddRateLimiter(options =>
 {
-    option.AddFixedWindowLimiter("fixed", config =>
+    options.AddPolicy("PerClientPolicy", httpContext =>
+        RateLimitPartition.GetFixedWindowLimiter(
+            partitionKey: httpContext.Connection.RemoteIpAddress?.ToString(),
+            factory: _ => new FixedWindowRateLimiterOptions
+            {
+                PermitLimit = 3,
+                Window = TimeSpan.FromSeconds(30)
+            }
+        ));
+
+    options.OnRejected = (context, token) =>
     {
-        config.PermitLimit = 3;
-        config.Window = TimeSpan.FromSeconds(30);
-    });
+        var ip = context.HttpContext.Connection.RemoteIpAddress?.ToString();
+        var logger = context.HttpContext.RequestServices.GetRequiredService<ILogger<Program>>();
+        logger?.LogWarning("Лимит запросов превышен для IP: {IP} | {Path}",
+            ip,
+            context.HttpContext.Request.Path);
+        return ValueTask.CompletedTask;
+    };
 });
 
 var app = builder.Build();
 
 app.UseRateLimiter();
 app.MapReverseProxy()
-    .RequireRateLimiting("fixed");
+    .RequireRateLimiting("PerClientPolicy");
 
 await app.RunAsync();
